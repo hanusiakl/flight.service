@@ -1,7 +1,5 @@
 def productVersion = env.BUILD_NUMBER
 def label = "development-job-flight-service-app-${UUID.randomUUID().toString()}"
-def gitUrl = "ssh://tfs.eplan.lan:22/tfs/DefaultCollection/CUS%20GROM%20Team/_git/RSP.JobManagement"
-def branchName = "develop"
 
 podTemplate(
     label: label, 
@@ -72,12 +70,12 @@ podTemplate(
 		stage('deployment') {
 			container('kubectl') {
                 try {
-                    sh "cd infrastructure\kubernetes\development && kubectl delete -f ."
+                    sh "cd infrastructure/kubernetes/development && kubectl delete -f ."
                 } catch (ex) {
                     currentBuild.result = 'UNSTABLE'
                 }
                 try {
-                   sh "cd infrastructure\kubernetes\development && kubectl apply -f ."
+                   sh "cd infrastructure/kubernetes/development && kubectl apply -f ."
                 } catch (ex) {
                     currentBuild.result = 'UNSTABLE'
                 }
