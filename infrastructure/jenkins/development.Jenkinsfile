@@ -16,7 +16,7 @@ podTemplate(
             ttyEnabled: true),
         containerTemplate(
             name: 'kubectl', 
-            image: 'lachlanevenson/k8s-kubectl:v1.8.8',
+            image: 'lachlanevenson/k8s-kubectl:v1.22.2',
             command: 'cat', 
             ttyEnabled: true)
     ],
@@ -63,8 +63,10 @@ podTemplate(
 			}
 		}
 		stage('image: publish') {
-			container('docker') {
-				sh "cd flight-service-app && docker push lehudocker/flight-service-app"
+		    container('docker') {
+    		    withDockerRegistry(credentialsId: 'docker') {
+        			sh "cd flight-service-app && docker push lehudocker/flight-service-app"
+                }
 			}
 		}
 		stage('deployment') {
