@@ -1,8 +1,4 @@
-def productVersion = env.BUILD_NUMBER
-//def label = "development-job-flight-service-app-${UUID.randomUUID().toString()}"
-
 podTemplate(
-    // label: POD_LABEL, 
     containers: [
         containerTemplate(
             name: 'node14', 
@@ -32,6 +28,10 @@ podTemplate(
 {
     node(POD_LABEL) {
         stage('build: checkout files') {
+            container('node14') {
+                 git branch: "develop",
+                    url: "https://github.com/hanusiakl/flight.service.git"
+            }
         }
         stage('build: install dependencies') {
             container('node14') {
@@ -46,7 +46,7 @@ podTemplate(
         stage('test: unit tests') {
             container('node14') {
                 try {
-                    sh "cd flight-service-app && && npm run test"
+                    sh "cd flight-service-app && npm run test"
                 } catch(ex) {
                     currentBuild.result = 'UNSTABLE'
                 }
