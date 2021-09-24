@@ -76,3 +76,5 @@ Nest is [MIT licensed](LICENSE).
 docker build -t flight-service-app .
 
 docker run flight-service-app
+
+kubectl port-forward service/flight-service-app 9991:3000

@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: development
+  name: flight-service-app
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+      targetPort: 3000
+  selector:
+    app: flight-service-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: development
+  name: flight-service-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flight-service-app
+  template:
+    metadata:
+      labels:
+        app: flight-service-app
+    spec:
+      imagePullSecrets:
+        - name: docker-registry-secret
+      containers:
+        - name: flight-service-app
+          image: lehudocker/flight-service-app:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: HOST_ENVIRONMENT
+              value: "Kubernetes Development"
+          envFrom:
+            - secretRef:
+                name: docker-registry-secret
