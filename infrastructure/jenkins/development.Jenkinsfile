@@ -54,17 +54,17 @@ podTemplate(
         }
 		stage('docker image: create') {
 			container('docker') {
-				sh "cd flight-service-app && npm run docker:build"
+				sh "cd flight-service-app && docker build -t flight-service-app ."
 			}
 		}
 		stage('docker image: tag') {
 			container('docker') {
-				sh "cd flight-service-app && npm run docker:tag"
+				sh "cd flight-service-app && docker tag flight-service-app lehudocker/flight-service-app"
 			}
 		}
 		stage('image: publish') {
 			container('docker') {
-				sh "cd flight-service-app && npm run docker:push"
+				sh "cd flight-service-app && docker push lehudocker/flight-service-app"
 			}
 		}
 		stage('deployment') {
