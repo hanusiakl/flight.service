@@ -29,7 +29,7 @@ podTemplate(
     node(POD_LABEL) {
         stage('build: checkout files') {
             container('node14') {
-                 git branch: "master",
+                 git branch: "main",
                     url: "https://github.com/hanusiakl/flight.service.git"
             }
         }
