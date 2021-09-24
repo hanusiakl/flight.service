@@ -52,6 +52,17 @@ podTemplate(
                 }
             }
         }
+
+        stage('test: e2e tests') {
+            container('node14') {
+                try {
+                    sh "cd flight-service-app && npm run test:e2e"
+                } catch(ex) {
+                    currentBuild.result = 'UNSTABLE'
+                }
+            }
+        }
+
 		stage('docker image: create') {
 			container('docker') {
 				sh "cd flight-service-app && docker build -t flight-service-app ."
@@ -65,7 +76,12 @@ podTemplate(
 		stage('image: publish') {
 		    container('docker') {
     		    withDockerRegistry(credentialsId: 'docker') {
-        			sh "cd flight-service-app && docker push lehudocker/flight-service-app"
+                    try {
+                        sh "cd flight-service-app && docker push lehudocker/flight-service-app"
+                    } catch(ex) {
+                        currentBuild.result = 'ERROR'
+                    }
+        			
                 }
 			}
 		}
@@ -79,7 +95,7 @@ podTemplate(
                 try {
                    sh "cd infrastructure/kubernetes/development && kubectl apply -f ."
                 } catch (ex) {
-                    currentBuild.result = 'UNSTABLE'
+                    currentBuild.result = 'ERROR'
                 }
             }
 		}
