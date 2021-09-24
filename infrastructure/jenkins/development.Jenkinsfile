@@ -5,7 +5,7 @@ podTemplate(
     label: label, 
     containers: [
         containerTemplate(
-            name: node14, 
+            name: 'node14', 
             image: 'node:14-alpine', 
             command: 'cat', 
             ttyEnabled: true, 
@@ -34,17 +34,17 @@ podTemplate(
         stage('build: checkout files') {
         }
         stage('build: install dependencies') {
-            container(node14) {
+            container('node14') {
                 sh "cd flight-service-app && npm i"
             }
         }
         stage('build: service') {
-            container(node14) {
+            container('node14') {
                 sh "cd flight-service-app && npm run build"
             }
         }
         stage('test: unit tests') {
-            container(node14) {
+            container('node14') {
                 try {
                     sh "cd flight-service-app && && npm run test"
                 } catch(ex) {
