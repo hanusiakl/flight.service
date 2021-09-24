@@ -1,8 +1,8 @@
 def productVersion = env.BUILD_NUMBER
-def label = "development-job-flight-service-app-${UUID.randomUUID().toString()}"
+//def label = "development-job-flight-service-app-${UUID.randomUUID().toString()}"
 
 podTemplate(
-    label: label, 
+    // label: POD_LABEL, 
     containers: [
         containerTemplate(
             name: 'node14', 
@@ -30,7 +30,7 @@ podTemplate(
     ]
 ) 
 {
-    node(label) {
+    node(POD_LABEL) {
         stage('build: checkout files') {
         }
         stage('build: install dependencies') {
