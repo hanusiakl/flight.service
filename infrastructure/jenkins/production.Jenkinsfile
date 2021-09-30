@@ -88,7 +88,7 @@ podTemplate(
 		stage('deployment') {
 			container('kubectl') {
                 try {
-                    sh "cd infrastructure/kubernetes/production && kubectl delete -f ."
+                    sh "cd infrastructure/kubernetes/production && kubectl delete -f 03-deployment.yaml"
                 } catch (ex) {
                     currentBuild.result = 'UNSTABLE'
                 }
